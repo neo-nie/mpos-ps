@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <title>网络概况</title>
+    <link rel="Stylesheet" href="../styles/Style.css"/>
+    <script src="../scripts/jquery/jquery-1.7.2.js"></script>
+    <script src="../scripts/jquery/jquery.mousewheel.js"></script>
+    <!--弹出框样式脚本-->
+    <link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet" />
+    <script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script src="../scripts/app.js"></script>
+    <style>
+        html, body, #map { margin: 0px; padding: 0px; height: 100%;overflow: hidden; }
+        #map { top:0; left:0;}
+        .pos { position: absolute;}
+        .effect { box-shadow: rgba(0, 0, 0, 0.5) 0 0 5px; }
+        .map_help{ background: rgba(0,0,0,0.5); width: 100%; height: 100%; left: 0; top:0; text-align: center;}
+        .map_help h1{ color: #ffffff; margin: auto; height: 100%; line-height: 500px; font-size: 30px; font-weight: bolder;}
+    </style>
+    <script type="text/javascript">
+        jQuery.fn.extend({
+            showan:function (i) {
+                $('#map img').attr("src", "../images/map_0" + i + ".jpg");
+            }
+        });
+
+        $(document).ready(function () {
+            var i = 1;
+            $(this).showan(i);
+            $('#map').mousewheel(function (event, delta, deltaX, deltaY) {
+                if (delta > 0) {
+                    if (i < 4) {
+                        i++;
+                    }
+                }
+
+                else if (delta < 0) {
+                    if (i > 1) {
+                        i--;
+                    }
+                }
+                $(this).showan(i);
+            });
+            <!--手势切换图片-->
+            var getZoomClass = (function () {
+                var SupportsTouches = ("createTouch" in document), //判断是否支持触摸
+                        $ = function (id) {
+                            return document.getElementById(id);
+                        },
+                        preventDefault = function (ev) {
+                            if (ev)ev.preventDefault();
+                            else window.event.returnValue = false;
+                        },
+                        getTwoPointSub = function (ev) {
+                            var x1 = x2 = y1 = y2 = 0, sub;
+                            x1 = ev.touches.item(0).pageX;
+                            x2 = ev.touches.item(1).pageX;
+                            y1 = ev.touches.item(0).pageY;
+                            y2 = ev.touches.item(1).pageY;
+                            sub = Math.round(Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2)));
+                            return sub;
+                        },
+                        getimgid = function (i) {
+                            return i;
+                        }
+                getSize = function (img) {
+                    return {width:img.width, height:img.height};
+                };
+
+                function _zoom(opt) {
+                    if (!SupportsTouches)return false;
+                    this.el = typeof opt.el == 'string' ? $(opt.el) : opt.el;
+                    this.onstart = opt.start || new Function();//
+                    this.onmove = opt.move || new Function();
+                    this.onend = opt.end || new Function();
+                    this.action = false;
+                    this.init();
+                }
+
+                _zoom.prototype = {
+                    init:function () {
+                        this.el['ontouchstart'] = this.bind(function (e) {//绑定节点的 [鼠标按下/触摸开始] 事件
+                            if (this.action || e.touches.length < 2)return false;//这里监测了触摸点的数量，小于两个说明不是在进行缩放操作
+                            else this.action = true;
+                            preventDefault(e);
+                            this.imgid = getimgid(i);
+                            this.startSub = getTwoPointSub(e);
+                            this.startSize = getSize(this.el);
+
+                            this.onstart();
+                            document.ontouchmove = this.bind(function (e) {
+                                if (e.touches.length > 1) {
+                                    preventDefault(e);//取消文档的默认行为[鼠标移动、触摸移动]
+                                    this.nowSub = getTwoPointSub(e);
+
+                                    i = this.imgid + parseInt((this.nowSub - this.startSub) / 50);
+                                    if (i > 4)i = 4;
+                                    else if (i < 1)i = 1;
+
+                                    jQuery(this).showan(i);
+//                                    this.el.width=this.startSize.width*this.nowSub/this.startSub;
+//                                    this.el.height=this.startSize.height*this.nowSub/this.startSub;
+                                    this.onmove();
+                                }
+                            }, this);
+                            document.ontouchend = document.ontouchcancel = this.bind(function () {
+                                document.ontouchend = document.ontouchcancel = document.ontouchmove = null;
+                                this.action = false;
+                                this.onend();
+                            }, this);
+                        }, this);
+                    },
+                    bind:function (fn, obj) {
+                        return function () {
+                            fn.apply(obj, arguments);
+                        }
+                    },
+                    tool:null
+                }
+                return function (opt) {
+                    return new _zoom(opt);
+                }
+            })();
+            var a = getZoomClass({
+                el:'map_01'
+            });
+
+            //提示信息等待，然后消失
+            $('#map_help').delay(1000).fadeOut('slow');
+        });
+
+
+    </script>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg" /><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">网络概况</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png" />注销</a><a href="javascript:" onclick="ShowSetting();"><img src="../images/setting.png" />设置</a></span></div>
+    </div>
+</div>
+<div id="content" style="position: relative; margin: 0;">
+    <div id="map" class="pos">
+        <img id="map_01" src="../images/map_01.jpg"/>
+    </div>
+    <img class="pos effect" src="../images/lefttop_img.png" style=" left: 5px; top:5px;"/>
+    <div class="pos" style="bottom: 5px; text-align: center; width: 100%;">
+        <img class="effect" src="../images/bottom_img.png"/>
+    </div>
+    <div id="map_help" class="pos map_help"><h1>请用双手指放大缩小</h1></div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $('#content').height($(window).height()-50);
+</script>

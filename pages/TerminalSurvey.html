@@ -1,0 +1,549 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>终端概况</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <link rel="Stylesheet" href="../styles/Style.css"/>
+    <!--弹出框样式脚本-->
+    <link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet"/>
+    <script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script>
+        function ShowDialog() {
+            art.dialog({
+                title:'新建查询',
+                lock:true,
+                content:"<div><iframe height='70' width='360' scrolling='no' frameborder='0' src='Dialog/TerminalSurveySelect.html'/></div>",
+                okValue:'确定',
+                ok:function () {
+                },
+                cancel:function () {
+                },
+                cancelValue:'取消',
+                padding:'5px'
+            });
+        }
+    </script>
+
+    <script src="../scripts/jquery/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="../scripts/js/highcharts.js"></script>
+    <script src="../scripts/app.js"></script>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg" /><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">终端概况</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png" />注销</a><a href="javascript:" onclick="ShowSetting();"><img src="../images/setting.png" />设置</a></span></div>
+    </div>
+</div>
+<div id="content">
+    <div class="selectdiv">
+        <a href="javascript:" class="linkbtn" onclick="ShowDialog();"><span>新建查询</span></a><span style="margin: 5px;">当前查询：全网，总体性能，一小时粒度</span>
+    </div>
+    <div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="main_table">
+            <tr>
+                <td width="50%">
+                    <div class="chart_div" id="chart_05">
+                    </div>
+                </td>
+                <td width="50%">
+                    <div class="chart_div" id="chart_06">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div style="position: relative;">
+                        <div class="chart_div" id="chart_01">
+                        </div>
+                        <div class="chart_div" id="chart_02">
+                        </div>
+                        <div class="tab_div" style="position:absolute; left: 3px; top:3px;">
+                            <ul id="tab_01" class="tab_ul">
+                                <li><a href="javascript:"><span>按流量</span></a></li>
+                                <li><a href="javascript:"><span>按用户数</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="position: relative;">
+                        <div class="chart_div" id="chart_03">
+                        </div>
+                        <div class="chart_div" id="chart_04">
+                        </div>
+                        <div class="tab_div" style="position:absolute; left: 3px; top:3px;">
+                            <ul id="tab_02" class="tab_ul">
+                                <li><a href="javascript:"><span>按流量</span></a></li>
+                                <li><a href="javascript:"><span>按用户数</span></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#chart_01").height(($(window).height() - 100) / 2);
+    $("#chart_02").height(($(window).height() - 100) / 2);
+    $("#chart_03").height(($(window).height() - 100) / 2);
+    $("#chart_04").height(($(window).height() - 100) / 2);
+    $("#chart_05").height(($(window).height() - 100) / 2);
+    $("#chart_06").height(($(window).height() - 100) / 2);
+
+    var chart1;
+    var chart2;
+    var chart3;
+    var chart4;
+    var chart5;
+    var chart6;
+    chart1 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_01',
+            zoomType:'xy'
+        },
+        title:{
+            text:'自有业务流量分布情况'
+        },
+        //                    subtitle: {
+        //                        text: 'Source: WorldClimate.com'
+        //                    },
+        xAxis:{
+            categories:[
+                '诺基亚',
+                '山寨机',
+                '索尼爱立信',
+                '苹果',
+                '三星'
+            ],
+            labels:{
+                style:{
+                    fontSize:'12px',
+                    fontFamily:'宋体'
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + 'MB';
+                    }
+                },
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:'',
+                    maxY:100
+                },
+                opposite:true
+            }
+        ],
+
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'流量MB',
+                type:'column',
+                data:[3159.84360886, 1613.36991215, 282.77731037, 211.59972954, 145.401371]
+
+            },
+            {
+                name:'同类型流量占比',
+                yAxis:1,
+                type:'line',
+                data:[18.63, 7.65, 2.11, 1.89, 1.84]
+            }
+        ]
+    });
+    chart2 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_02',
+            zoomType:'xy'
+        },
+        title:{
+            text:'自有业务用户数分布情况'
+        },
+        //                    subtitle: {
+        //                        text: 'Source: WorldClimate.com'
+        //                    },
+        xAxis:{
+            categories:[
+                '诺基亚',
+                '山寨机',
+                '索尼爱立信',
+                '苹果',
+                '三星'
+            ],
+            labels:{
+                style:{
+                    fontSize:'12px',
+                    fontFamily:'宋体'
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                min:0,
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:'',
+                    maxY:100
+                },
+                opposite:true
+            }
+        ],
+
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'用户数',
+                type:'column',
+                data:[39816, 31305, 6733, 4820, 1612]
+
+            },
+            {
+                name:'同类型用户数占比',
+                yAxis:1,
+                type:'line',
+                data:[13.32, 8.75, 2.55, 2.24, 1.42]
+            }
+        ]
+    });
+    chart3 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_03',
+            zoomType:'xy'
+        },
+        title:{
+            text:'终端型号Top20排名'
+        },
+        //                    subtitle: {
+        //                        text: 'Source: WorldClimate.com'
+        //                    },
+        xAxis:{
+            categories:[
+                'IPHONE_4',
+                '5230',
+                '6120C',
+                '5233',
+                '5800',
+                '5250',
+                'C5-03',
+                '6300',
+                'K700C',
+                'N73',
+                'E66',
+                'X6-00',
+                '6700S',
+                'N70',
+                'E15I',
+                'GT-S5830',
+                'N8',
+                '金鹏-Z618',
+                '5300',
+                'GT-I9100'
+            ],
+            labels:{
+                rotation: -45,
+                align: 'right',
+                style: {
+                    fontFamily: '黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + 'MB';
+                    }
+                },
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:'',
+                    maxY:100
+                },
+                opposite:true
+            }
+        ],
+
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'流量MB',
+                type:'column',
+                data:[388.483627319335, 363.024349212646, 289.468898773193, 251.32901763916, 228.355512619018, 160.042356491088, 128.547218322753, 110.690910339355, 109.064257621765, 107.972982406616, 98.7728004455566, 89.4334383010864, 84.4807081222534, 72.8441581726074, 64.04918384552, 63.9430341720581, 63.580883026123, 62.8628768920898, 43.4209442138671, 33.5745649337768]
+
+            },
+            {
+                name:'同类型流量占比',
+                yAxis:1,
+                type:'line',
+                data:[1.68990792973945, 1.57915979794605, 1.25919280260339, 1.09328391215035, 0.993348919843624, 0.696185960769361, 0.559181773215381, 0.481506642695118, 0.474430685993013, 0.469683627146972, 0.429662737313537, 0.389036412195143, 0.367491982997899, 0.316872866381817, 0.278614634085756, 0.278152881872, 0.276577520517641, 0.273454186162789, 0.188881571277833, 0.146049716202074]
+            }
+        ]
+    });
+    chart4 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_04',
+            zoomType:'xy'
+        },
+        title:{
+            text:'终端型号Top20排名'
+        },
+        //                    subtitle: {
+        //                        text: 'Source: WorldClimate.com'
+        //                    },
+        xAxis:{
+            categories:[
+                'IPHONE_4',
+                '5230',
+                '6120C',
+                '5233',
+                '5800',
+                '5250',
+                'C5-03',
+                '6300',
+                'K700C',
+                'N73',
+                'E66',
+                'X6-00',
+                '6700S',
+                'N70',
+                'E15I',
+                'GT-S5830',
+                'N8',
+                '金鹏-Z618',
+                '5300',
+                'GT-I9100'
+            ],
+            labels:{
+                rotation: -45,
+                align: 'right',
+                style: {
+                    fontFamily: '黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                min:0,
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                min:0,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:'',
+                    maxY:100
+                },
+                opposite:true
+            }
+        ],
+
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'用户数',
+                type:'column',
+                data:[9845, 5916, 5552, 4513, 3702, 3619, 2545, 2360, 2283, 2179, 2128, 1950, 1923, 1861, 1833, 1747, 1701, 1679, 1492, 1458]
+
+            },
+            {
+                name:'同类型用户数占比',
+                yAxis:1,
+                type:'line',
+                data:[1.63084981438627, 0.980000762001945, 0.919703216807775, 0.747590168849692, 0.613245912936308, 0.599496747411264, 0.421585858569126, 0.390940128181979, 0.378184878237059, 0.360957008181582, 0.35250872575053, 0.323022563540195, 0.318549943429638, 0.308279482435027, 0.303641209727783, 0.289395086412677, 0.281775066965062, 0.278130709837942, 0.247153674257421, 0.241521485970053]
+            }
+        ]
+    });
+    chart5 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_05',
+            plotBackgroundColor:null,
+            plotBorderWidth:null,
+            plotShadow:false
+        },
+        title:{
+            text:'终端制式流量分布'
+        },
+        tooltip:{
+            formatter:function () {
+                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+            }
+        },
+        plotOptions:{
+            pie:{
+                allowPointSelect:true,
+                cursor:'pointer',
+                dataLabels:{
+                    enabled:true,
+                    color:'#000000',
+                    connectorColor:'#000000'
+                }
+            }
+        },
+        series:[
+            {
+                type:'pie',
+                name:'流量',
+                data:[
+                    ['GPRS', 6750.8564],
+                    ['EDGE', 27896.085262],
+                    ['TD', 336.58762]
+                ]
+            }
+        ]
+    });
+    chart6 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_06',
+            plotBackgroundColor:null,
+            plotBorderWidth:null,
+            plotShadow:false
+        },
+        title:{
+            text:'终端制式用户数分布'
+        },
+        tooltip:{
+            formatter:function () {
+                return '<b>' + this.point.name + '</b>: ' + this.percentage + ' %';
+            }
+        },
+        plotOptions:{
+            pie:{
+                allowPointSelect:true,
+                cursor:'pointer',
+                dataLabels:{
+                    enabled:true,
+                    color:'#000000',
+                    connectorColor:'#000000'
+                }
+            }
+        },
+        series:[
+            {
+                type:'pie',
+                name:'用户数',
+                data:[
+                    ['GPRS', 208182],
+                    ['EDGE', 271139],
+                    ['TD', 9507]
+                ]
+            }
+        ]
+    });
+
+    <!--流量、用户数的图表切换-->
+    $(function () {
+        $('#chart_02').css({display:'none'});
+        $('#chart_04').css({display:'none'});
+        var node1 = $('#tab_01 li:first-child');
+        var node2 = $('#tab_02 li:first-child');
+        node1.addClass('current');
+        node2.addClass('current');
+        $('#tab_01 li').click(function () {
+            node1.removeClass('current');
+            $(this).addClass('current');
+            node1 = $(this);
+            if ($(this).is('#tab_01 li:nth-child(1)')) {
+                $('#chart_01').css({display:'block'});
+                $('#chart_02').css({display:'none'});
+            }
+            else if ($(this).is('#tab_01 li:nth-child(2)')) {
+                $('#chart_01').css({display:'none'});
+                $('#chart_02').css({display:'block'});
+            }
+        })
+        $('#tab_02 li').click(function () {
+            node2.removeClass('current');
+            $(this).addClass('current');
+            node2 = $(this);
+            if ($(this).is('#tab_02 li:nth-child(1)')) {
+                $('#chart_03').css({display:'block'});
+                $('#chart_04').css({display:'none'});
+            }
+            else if ($(this).is('#tab_02 li:nth-child(2)')) {
+                $('#chart_03').css({display:'none'});
+                $('#chart_04').css({display:'block'});
+            }
+        })
+    })
+});
+</script>
+

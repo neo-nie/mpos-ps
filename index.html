@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<html manifest="cache.appcache">
+<head>
+    <title>数据业务生态系统</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <link rel="Stylesheet" href="styles/Style.css" />
+
+    <!--弹出框样式脚本-->
+    <link id="artDialog-skin" href="styles/artDialog-skin/skins/default.css" rel="stylesheet" />
+    <script src="scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script src="scripts/jquery/jquery-1.7.2.js"></script>
+    <script src="scripts/app.js"></script>
+    <script>
+        function ShowSetting1() {
+            art.dialog({
+                title: '设置',
+                content: "<div><iframe height='362' width='740' scrolling='no' frameborder='0' src='pages/Dialog/Setting.html'/></div>",
+                padding: '0'
+            });
+        }
+    </script>
+</head>
+<body>
+<div id="header">
+    <a href="#" class="logo_btn">
+        <img src="images/logo_img.jpg" /><span>数据业务生态系统</span></a>
+    <!--
+    <div id="navigation">
+        <div class="navigationmain">
+            <ul>
+                <li onClick="SelectMenu(this)" id="tab01"><a href="#"><span>导航页</span><img onClick="Close_tab(this)"
+                                                                                           class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab02"><a href="#"><span>网络指标分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab03"><a href="#"><span>网络故障分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab04"><a href="#"><span>网络拓扑分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab05"><a href="#"><span>业务指标分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab06"><a href="#"><span>业务故障分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab07"><a href="#"><span>业务速率分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+                <li onClick="SelectMenu(this)" id="tab08"><a href="#"><span>用户投诉分析</span><img onClick="Close_tab(this)"
+                                                                                              class="tabclose" src="images/close.png" alt="关闭" /></a></li>
+            </ul>
+        </div>
+    </div>
+    -->
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="login.html"><img
+                src="images/exit.png" />注销</a><a href="#" onClick="ShowSetting1();"><img src="images/setting.png" />设置</a></span></div>
+    </div>
+</div>
+<div id="container">
+    <div id="tab01_div">
+        <div class="startpage_main">
+            <img src="images/index_bg.jpg" />
+            <div class="manage_menu">
+                <div class="manage_title">管理视图</div>
+                <a href="pages/NetworkSurvey2.html" class="manage_menuitem" style="top:100px;"><span>网络</span><img src="images/网络质量.png"/></a>
+                <a href="pages/BusinessSurvey.html" class="manage_menuitem" style="top:140px; left:85px;"><span>业务</span><img src="images/业务质量.png"/></a>
+                <a href="pages/TerminalSurvey.html" class="manage_menuitem" style="top:100px; right:0;"><span>终端</span><img src="images/终端分析.png"/></a>
+            </div>
+            <div class="map_menu">
+                <div class="map_menuitem_h" style="left: 80px;">
+                    <div class="icon">
+                        <img src="images/专题分析.png" /></div>
+                    <div class="menu_title">
+                        专题分析</div>
+                </div>
+                <div class="map_menuitem_h" style="left: 240px;">
+                    <div class="icon">
+                        <img src="images/市场支撑.png" /></div>
+                    <div class="menu_title">
+                        市场支撑</div>
+                </div>
+                <div class="map_menuitem" style="top: 130px;">
+                    <div class="icon">
+                        <img src="images/网络质量.png" /></div>
+                    <div class="menu_title">
+                        网络质量</div>
+                    <ul class="menu_list">
+                        <li><a href="pages/NetworkIndicatorAnalysis.html">指标分析</a></li><!--pages/NetworkIndicatorAnalysis.html-->
+                        <li><a href="pages/NetworkFailAnalysis.html">故障分析</a></li>
+                        <li><a href="pages/NetworkTopologyAnalysis.html">拓扑分析</a></li>
+                    </ul>
+                </div>
+                <div class="map_menuitem" style="top: 130px; left: 160px;">
+                    <div class="icon">
+                        <img src="images/监控告警.png" /></div>
+                    <div class="menu_title">
+                        监控告警</div>
+                    <ul class="menu_list">
+                        <li><a href="pages/ActiveMonitor.html">主动监控</a></li>
+                        <li><a href="pages/AlarmMonitor.html">告警监控</a></li>
+                    </ul>
+                </div>
+                <div class="map_menuitem" style="top: 130px; left: 320px;">
+                    <div class="icon">
+                        <img src="images/终端分析.png" /></div>
+                    <div class="menu_title">
+                        终端分析</div>
+                    <ul class="menu_list">
+                        <li class="disable"><a href="#">终端分析</a></li>
+                    </ul>
+                </div>
+                <div class="map_menuitem" style="top: 260px; left: 80px;">
+                    <div class="icon">
+                        <img src="images/业务质量.png" /></div>
+                    <div class="menu_title">
+                        业务质量</div>
+                    <ul class="menu_list">
+                        <li><a href="pages/BusinessIndicatorAnalysis.html">指标分析</a></li>
+                        <li><a href="pages/BusinessFailAnalysis.html">故障分析</a></li>
+                        <li><a href="pages/BusinessRateAnalysis.html">速率分析</a></li>
+                    </ul>
+                </div>
+                <div class="map_menuitem" style="top: 260px; left: 240px;">
+                    <div class="icon">
+                        <img src="images/用户感知.png" /></div>
+                    <div class="menu_title">
+                        用户感知</div>
+                    <ul class="menu_list">
+                        <li><a href="pages/ComplaintHandling.html">用户投诉分析</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--
+    <div id="tab02_div" style="display: none;">
+        网络指标分析</div>
+    <div id="tab03_div" style="display: none;">
+        网络故障分析</div>
+    <div id="tab04_div" style="display: none;">
+        网络拓扑分析</div>
+    <div id="tab05_div" style="display: none;">
+        业务指标分析</div>
+    <div id="tab06_div" style="display: none;">
+        业务故障分析</div>
+    <div id="tab07_div" style="display: none;">
+        业务速率分析</div>
+        -->
+</div>
+<!--<div id="cache-info" style=" height: 70px; background: #ffffff; line-height: 14px; position: absolute; right: 10px; bottom: 5px; border: 1px solid #cccccc; padding: 3px; overflow: auto; width: 200px;">-->
+    <!--<div>aaaa</div>-->
+    <!--<div>bbbb</div>-->
+    <!--<div>cccc</div>-->
+    <!--<div>dddd</div>-->
+    <!--<div>eeee</div>-->
+    <!--<div>ffff</div>-->
+<!--</div>-->
+</body>
+</html>
+<!--
+<script type="text/javascript" language="javascript">
+    var FirstNode = document.getElementById("tab01");
+    var FirstDiv = document.getElementById("tab01_div");
+    FirstNode.className = "current";
+
+    function SelectMenu(MenuObj) {
+        var DivObj = MenuObj.id + "_div";
+        FirstNode.className = "";
+        MenuObj.className = "current";
+        FirstDiv.style.display = "none";
+        document.getElementById(DivObj).style.display = "";
+        FirstNode = MenuObj;
+        FirstDiv = document.getElementById(DivObj);
+    }
+
+    function Close_tab(node) {
+        var parent = node.parentNode.parentNode.parentNode;
+        node.parentNode.parentNode.removeNode(true);
+        var content = node.parentNode.parentNode.id + "_div";
+        var div = document.getElementById(content);
+        div.parentNode.removeChild(div);
+        SelectMenu(parent.childNodes[0]);
+    }
+
+</script>
+-->

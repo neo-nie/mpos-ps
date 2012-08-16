@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <title>网络概况</title>
+
+    <link rel="Stylesheet" href="../styles/Style.css"/>
+
+    <!--<script src="../scripts/jquery/jquery-1.7.2.js"></script>-->
+    <!--弹出框样式脚本-->
+    <link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet" />
+    <script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script src="../scripts/app.js"></script>
+
+    <!--<link rel="stylesheet" type="text/css" href="http://serverapi.arcgisonline.com/jsapi/arcgis/1.6/js/dojo/dijit/themes/tundra/tundra.css">-->
+    <!--<script type="text/javascript" src="http://serverapi.arcgisonline.com/jsapi/arcgis/?v=1.6"></script>-->
+    <link rel="stylesheet" type="text/css" href="../styles/mapcss/tundra.css"/>
+    <script type="text/javascript" src="../scripts/arcgis.js"></script>
+
+    <style>
+        html, body, #map {
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+
+    <script type="text/javascript">
+    dojo.require("esri.map");
+    dojo.declare("GoogleMapLayer", esri.layers.TiledMapServiceLayer, {
+        constructor:function () {
+            this.spatialReference = new esri.SpatialReference({ wkid:102113 });
+            this.initialExtent = this.fullExtent = new esri.geometry.Extent(-20037508.342787, -20037508.342787, 20037508.342787, 20037508.342787, this.spatialReference);
+
+            this.tileInfo = new esri.layers.TileInfo({
+                "rows":256,
+                "cols":256,
+                "dpi":96,
+                "format":"PNG32",
+                "compressionQuality":0,
+                "origin":{
+                    "x":-20037508.342787,
+                    "y":20037508.342787
+                },
+                "spatialReference":{
+                    "wkid":102113
+                },
+                "lods":[
+//                    {"level":0, "resolution":156543.033928, "scale":591657527.591555},
+//                    {"level":1, "resolution":78271.5169639999, "scale":295828763.795777},
+//                    {"level":2, "resolution":39135.7584820001, "scale":147914381.897889},
+//                    {"level":3, "resolution":19567.8792409999, "scale":73957190.948944},
+//                    {"level":4, "resolution":9783.93962049996, "scale":36978595.474472},
+//                    {"level":5, "resolution":4891.96981024998, "scale":18489297.737236},
+//                    {"level":6, "resolution":2445.98490512499, "scale":9244648.868618},
+//                    {"level":7, "resolution":1222.99245256249, "scale":4622324.434309},
+//                    {"level":8, "resolution":611.49622628138, "scale":2311162.217155},
+//                    {"level":9, "resolution":305.748113140558, "scale":1155581.108577},
+//                    {"level":10, "resolution":152.874056570411, "scale":577790.554289},
+                    {"level":11, "resolution":76.4370282850732, "scale":288895.277144},
+                    {"level":12, "resolution":38.2185141425366, "scale":144447.638572},
+                    {"level":13, "resolution":19.1092570712683, "scale":72223.819286},
+                    {"level":14, "resolution":9.55462853563415, "scale":36111.909643},
+                    {"level":15, "resolution":4.77731426794937, "scale":18055.954822},
+                    {"level":16, "resolution":2.38865713397468, "scale":9027.977411}
+//                    {"level":17, "resolution":1.19432856685505, "scale":4513.988705},
+//                    {"level":18, "resolution":0.597164283559817, "scale":2256.994353},
+//                    {"level":19, "resolution":0.298582141647617, "scale":1128.497176}
+                ]
+            });
+
+            this.loaded = true;
+            this.onLoad(this);
+        },
+
+        getTileUrl:function (level, row, col) {
+//            var url = dojo.string.substitute("http://mt${0}.google.cn/vt/lyrs=s@163000000&hl=zh-CN&gl=cn&x=${1}&s=&y=${2}&z=${3}&s=", [row % 4, col, row, level]);
+            var url = dojo.string.substitute("http://mt${0}.google.cn/vt/lyrs=m@163000000&hl=zh-CN&gl=cn&x=${1}&s=&y=${2}&z=${3}&s=", [row % 4, col, row, level]);
+//            var url = dojo.string.substitute("http://192.168.4.206/foshanmap/${0}/${1}_${2}.png", [level, col, row]);
+            return url;
+        }
+    });
+
+    function init() {
+        var map = new esri.Map("map",{
+            mapOptions: {
+                slider: true,
+                nav:false,
+                wrapAround180:true
+            }
+        });
+        dojo.connect(map, "onLoad", function () {
+            //after map loads, connect to listen to mouse move & drag events
+            dojo.connect(map, "onMouseMove", showCoordinates);
+            dojo.connect(map, "onMouseDrag", showCoordinates);
+        });
+
+        map.addLayer(new GoogleMapLayer());
+//        map.zoomTo(12631027.4361204, 2639917.78294726, 12);
+
+        var pnt = new esri.geometry.Point(12631027.4361204, 2639917.78294726, new esri.SpatialReference({ wkid:102113 }));
+//        map.centerAndZoom(pnt, 15);
+        map.centerAt(pnt);
+    }
+
+    function showCoordinates(evt) {
+        //get mapPoint from event
+        //The map is in web mercator - modify the map point to display the results in geographic
+        var mp = esri.geometry.webMercatorToGeographic(evt.mapPoint);
+        //display mouse coordinates
+        dojo.byId("info").innerHTML = mp.x + ", " + mp.y;
+    }
+
+    dojo.addOnLoad(init);
+
+    </script>
+
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg" /><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">网络概况</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png" />注销</a><a href="javascript:" onclick="ShowSetting();"><img src="../images/setting.png" />设置</a></span></div>
+    </div>
+</div>
+<div id="map" class="tundra">
+    <span id="info" style="position:absolute; right:150px; bottom:5px; color:#000; z-index:50;"></span>
+</div>
+</body>
+</html>

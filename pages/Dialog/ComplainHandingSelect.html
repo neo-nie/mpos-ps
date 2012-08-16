@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新建查询</title>
+    <link href="../../styles/Style.css" rel="stylesheet" type="text/css">
+
+    <link type="text/css" href="../../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+
+    <!--日历控件-->
+    <!--<link rel="stylesheet" media="all" type="text/css" href="../../styles/css/ui-lightness/jquery-ui.css" />-->
+    <link rel="stylesheet" media="all" type="text/css" href="../../styles/css/ui-lightness/jquery-ui-timepicker-addon.css" />
+    <script type="text/javascript" src="../../scripts/jquery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/jquery-ui-1.8.21.min.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/ui/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/ui/localization/jquery-ui-timepicker-zh-CN.js"></script>
+</head>
+<body>
+    <div>
+        <div>
+            <table width="100%" border="0" cellspacing="1" cellpadding="0">
+                <tr>
+                    <td width="50%">
+                        <span>接口:</span>
+                        <select style="width: 160px;">
+                            <option>GB</option>
+                            <option>IUPS</option>
+                        </select>
+                    </td>
+                    <td width="50%">
+                        <span>IMSI:</span>
+                        <input type="text" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"  style="vertical-align: top; padding-top: 5px;">
+                        <span>时间段:</span><input type="text" id="datepicker1" /><span>至</span><input type="text" id="datepicker2" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" language="javascript">
+    $('#datepicker1').datetimepicker({
+        ampm: true
+    })
+    $('#datepicker2').datetimepicker({
+        ampm: true
+    })
+
+</script>

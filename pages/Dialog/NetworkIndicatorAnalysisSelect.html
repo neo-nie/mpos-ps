@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>新建查询</title>
+    <link href="../../styles/Style.css" rel="stylesheet" type="text/css">
+    <link href="../../styles/css/thickbox.css" rel="stylesheet" type="text/css">
+
+    <!--tab页-->
+    <link type="text/css" href="../../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />
+    <!--<script type="text/javascript" src="../scripts/jquery/jquery-1.7.2.min.js"></script>-->
+    <script type="text/javascript" src="../../scripts/jquery/jquery-ui-1.8.21.custom.min.js"></script>
+
+    <!--日历控件-->
+    <!--<link rel="stylesheet" media="all" type="text/css" href="../../styles/css/ui-lightness/jquery-ui.css" />-->
+    <link rel="stylesheet" media="all" type="text/css" href="../../styles/css/ui-lightness/jquery-ui-timepicker-addon.css" />
+    <script type="text/javascript" src="../../scripts/jquery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/jquery-ui-1.8.21.min.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/ui/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="../../scripts/jquery/ui/localization/jquery-ui-timepicker-zh-CN.js"></script>
+
+    <!--树菜单导入-->
+    <link href="../../styles/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css">
+    <!--<script type="text/javascript" src="../../scripts/jquery/jquery-1.7.2.js"></script>-->
+    <script type="text/javascript" src="../../scripts/js/jquery.ztree.core-3.2.js"></script>
+    <script type="text/javascript" src="../../scripts/js/jquery.ztree.excheck-3.2.js"></script>
+
+    <!--	树菜单结构	-->
+    <script type="text/javascript">
+		<!--
+        function showIconForTree(treeId, treeNode) {
+            return !treeNode.isParent;
+        }
+
+        var setting = {
+            view: {
+                showIcon: showIconForTree
+            },
+            check: {
+                enable: true
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            }
+        };
+
+        var zNodes = [
+            { id: 1, pId: 0, name: "全网", open: true },
+            { id: 11, pId: 1, name: "SGSN204", open: true }
+		];
+        var zNodes1 = [
+            { id: 1, pId: 0, name: "全网", open: true },
+            { id: 11, pId: 1, name: "SGSN205", open: true },
+            { id: 111, pId: 11, name: "FSM06B2" },
+            { id: 112, pId: 11, name: "FSM06B2" }
+        ];
+        var zNodes2 = [
+            { id: 1, pId: 0, name: "全网", open: true },
+            { id: 11, pId: 1, name: "SGSN205", open: true },
+            { id: 111, pId: 11, name: "FSM06B2", open: true },
+            { id: 1111, pId: 111, name: "FP7LGK2" },
+            { id: 1112, pId: 111, name: "FP7LGK3" },
+            { id: 1113, pId: 111, name: "FP7LGK4" },
+            { id: 1114, pId: 111, name: "FP7LGK5" },
+            { id: 1115, pId: 111, name: "FP7LGK6" },
+            { id: 112, pId: 11, name: "FSM06B2", open: true },
+            { id: 1121, pId: 112, name: "FP7LGK7" },
+            { id: 1122, pId: 112, name: "FP7LGK8" },
+            { id: 1123, pId: 112, name: "FP7LGK9" },
+            { id: 1124, pId: 112, name: "FP7LGK2" }
+        ];
+        var zNodes3 = [
+            { id: 1, pId: 0, name: "网络接入性"},
+            { id:11, pId: 1, name: "Attach成功率"},
+            { id:12, pId: 1, name: "Attach请求重发率"},
+            { id:13, pId: 1, name: "Attach接受重发率"},
+            { id:14, pId: 1, name: "Attach建立时延(有线)"},
+            { id:15, pId: 1, name: "Attach建立时延(无线)"},
+            { id: 2, pId: 0, name: "网络保持性"},
+            { id:21, pId: 2, name: "Flush_Ⅱ请求次数"},
+            { id:22, pId: 2, name: "Flush_Ⅱ请求成功率"},
+            { id:23, pId: 2, name: "Flush_Ⅱ请求时延"},
+            { id:24, pId: 2, name: "Inter_SGSN RAU请求次数"},
+            { id:25, pId: 2, name: "Inter_SGSN RAU成功率"},
+            { id: 3, pId: 0, name: "小区性能"},
+            { id:31, pId: 3, name: "LLC_Discarded消息次数"},
+            { id:32, pId: 3, name: "LLC丢帧率"},
+            { id:33, pId: 3, name: "Radio-Status消息次数"},
+            { id:34, pId: 3, name: "每MB流量Radio Status次数"},
+            { id:35, pId: 3, name: "小区拥塞告警次数"}
+        ];
+        $(document).ready(function () {
+            $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+            $.fn.zTree.init($("#treeDemo1"), setting, zNodes1);
+            $.fn.zTree.init($("#treeDemo2"), setting, zNodes2);
+            $.fn.zTree.init($("#treeDemo3"), setting, zNodes3);
+        });
+		//-->
+    </script>
+    <style type="text/css">
+        .ztree{ height: 240px;}
+    </style>
+</head>
+<body>
+    <div class="setup_body">
+        <div style=" margin-bottom: 5px;">
+
+        </div>
+        <div>
+            <table width="100%" border="0" cellspacing="1" cellpadding="0">
+                <tr>
+                    <td width="50%">
+                        <span>查询模版:</span>
+                        <select name="select" style="width: 195px;">
+                            <option>查询模版一</option>
+                            <option>查询模版二</option>
+                        </select>
+                    </td>
+                    <td width="50%">
+                        <span>接口:</span>
+                        <select name="select" style="width: 210px;">
+                            <option selected>GB</option>
+                            <option>IUPS</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; padding-right: 1px;">
+                        <div id="tabs1">
+                            <ul>
+                                <li><a href="#tabs-1">SGSN</a></li>
+                                <li><a href="#tabs-2">BSC</a></li>
+                                <li><a href="#tabs-3">CI</a></li>
+                            </ul>
+                            <div id="tabs-1">
+                                <div>
+                                    <input type="text" class="search" style="margin-top: 3px;">
+                                </div>
+                                <div>
+                                    <ul id="treeDemo" class="ztree">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="tabs-2">
+                                <div>
+                                    <input type="text" class="search" style="margin-top: 3px;">
+                                </div>
+                                <div>
+                                    <ul id="treeDemo1" class="ztree">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div id="tabs-3">
+                                <div>
+                                    <input type="text" class="search" style="margin-top: 3px;">
+                                </div>
+                                <div>
+                                    <ul id="treeDemo2" class="ztree">
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="vertical-align: top;padding-left: 1px;">
+                        <div id="tabs2">
+                            <ul>
+                                <li><a href="#tabs2-1">全部指标</a></li>
+                            </ul>
+                            <div id="tabs2-1">
+                                <div>
+                                    <input type="text" class="search" style="margin-top: 3px;">
+                                </div>
+                                <div>
+                                    <ul id="treeDemo3" class="ztree">
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span>排序字段:</span>
+                        <select style="width: 190px">
+                            <option>Attach成功率</option>
+                            <option>Attach建立时延(有线)</option>
+                            <option>Attach附着成功率(去除用户原因)</option>
+                            <option>PDP激活请求次数</option>
+                            <option>PDP激活成功率</option>
+                            <option>PDP激活成功率(去除用户原因)</option>
+                            <option>Attach请求次数</option>
+                        </select>
+                    </td>
+                    <td>
+                        <span>最大记录条数:</span>
+                        <select>
+                            <option>100</option>
+                            <option>200</option>
+                            <option>500</option>
+                            <option>1000</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top; padding-top: 5px;">
+                        <span>时间粒度:</span>
+                        <select class="select2">
+                            <option>15分钟</option>
+                            <option>1小时</option>
+                            <option>1天</option>
+                        </select>
+                    </td>
+                    <td style="vertical-align: top;padding-top: 5px;">
+                        <input type="checkbox" id="busy_checked" /><label for="busy_checked">早晚忙时(9:00-12:00;21:00-24:00)</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"  style="vertical-align: top; padding-top: 5px;">
+                        <span>时间段:</span><input type="text" id="datepicker1" /><span>至</span><input type="text" id="datepicker2" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+<script type="text/javascript" language="javascript">
+    $('#datepicker1').datetimepicker({
+        ampm: true
+    })
+    $('#datepicker2').datetimepicker({
+        ampm: true
+    })
+    $('#tabs1').tabs();
+    $('#tabs2').tabs();
+
+    //listbox选择脚本
+    var FirstNode1 = document.getElementById("selectitem");
+    FirstNode1.className = "current";
+
+    function SelectMenu1(MenuObj) {
+        FirstNode1.className = "";
+        MenuObj.className = "current";
+        FirstNode1 = MenuObj;
+    }
+
+</script>

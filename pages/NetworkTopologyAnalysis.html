@@ -1,0 +1,288 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>拓扑分析</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <link rel="Stylesheet" href="../styles/Style.css"/>
+
+    <!--弹出框样式脚本-->
+    <link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet"/>
+    <script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script>
+        function ShowDialog() {
+            art.dialog({
+                title:'新建查询',
+                lock:true,
+                content:"<div><iframe height='350' width='500' scrolling='no' frameborder='0' src='Dialog/NetworkTopologyAnalysisSetup.html'/></div>",
+                okValue:'确定',
+                ok:function () {
+                },
+                cancel:function () {
+                },
+                cancelValue:'取消',
+                padding:'5px'
+            });
+        }
+    </script>
+    <script>
+        function ShowDialog1() {
+            art.dialog({
+                title:'历史指标下载',
+                lock:true,
+                content:"<div><iframe height='350' width='500' scrolling='no' frameborder='0' src='Dialog/NetworkTopologyAnalysisSelect.html'/></div>",
+                okValue:'确定',
+                ok:function () {
+                },
+                cancel:function () {
+                },
+                cancelValue:'取消',
+                padding:'5px'
+            });
+        }
+    </script>
+
+    <!--jqgrid-->
+    <link rel="stylesheet" type="text/css" media="screen" href="../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../scripts/jquery/jqgrid/js/src/css/ui.jqgrid.css"/>
+    <script src="../scripts/jquery/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="../scripts/jquery/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+
+    <!--图表控件-->
+    <script src="../scripts/js/highcharts.js"></script>
+    <script src="../scripts/app.js"></script>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg"/><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">拓扑分析</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png"/>注销</a><a href="javascript:" onclick="ShowSetting();"><img
+                src="../images/setting.png"/>设置</a></span></div>
+    </div>
+</div>
+<div id="content">
+    <div class="selectdiv">
+        <table width="100%" border="0" cellspacing="0" cellpadding="1">
+            <tr>
+                <td align="left"><a href="javascript:" class="linkbtn"
+                                    onclick="ShowDialog();"><span>新建查询</span></a><span style="margin: 5px;">当前查询：全网，总体性能，一小时粒度</span>
+                </td>
+                <td align="right"><a href="javascript:" class="linkbtn" onclick="ShowDialog1();"><span>历史指标下载</span></a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f1f1f1">
+            <tr>
+                <td width="50%" rowspan="2" align="center" valign="middle"><img src="../images/topology.png" width="500"
+                                                                                height="436"></td>
+                <td width="50%" rowspan="2" align="center" valign="middle">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="50%"><!--<div id="gridPager1"></div>-->
+                                <div style="position: relative;">
+                                    <div class="chart_div" id="chart_03"></div>
+                                    <div class="tab_div" style="position:absolute; left: 3px; top:3px;">
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <table width="100%" id="list2"></table>
+                                <!--<div id="gridPager2"></div>-->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#chart_03").height(($(window).height() - 100) / 2);
+
+        var chart3;
+        chart3 = new Highcharts.Chart({
+            chart:{
+                renderTo:'chart_03',
+                zoomType:'xy'
+            },
+            title:{
+                text:'2012-3-29 FSM06B2 Gb带宽利用率'
+            },
+            //                    subtitle: {
+            //                        text: 'Source: WorldClimate.com'
+            //                    },
+            xAxis:{
+                categories:[
+                    '00:00',
+                    '01:00',
+                    '02:00',
+                    '03:00',
+                    '04:00',
+                    '05:00',
+                    '06:00',
+                    '07:00',
+                    '08:00',
+                    '09:00',
+                    '10:00',
+                    '11:00',
+                    '12:00',
+                    '13:00',
+                    '14:00',
+                    '15:00',
+                    '16:00',
+                    '17:00',
+                    '18:00',
+                    '19:00',
+                    '20:00',
+                    '21:00',
+                    '22:00',
+                    '23:00'
+                ],
+                labels:{
+                    style:{
+                        fontSize:'12px',
+                        fontFamily:'宋体'
+                    }
+                }
+            },
+            yAxis:[
+                { // Primary yAxis
+                    min:0,
+                    labels:{
+                        formatter:function () {
+                            return this.value + 'MB';
+                        }
+                    },
+                    title:{
+                        text:''
+                    }
+                },
+                { // Secondary yAxis
+                    min:0,
+                    labels:{
+                        formatter:function () {
+                            return this.value + '%';
+                        }
+                    },
+                    title:{
+                        text:'',
+                        maxY:100
+                    },
+                    opposite:true
+                }
+            ],
+
+            plotLines: [{
+                color: '#ff0000',
+                width: 2,
+                yAxis:1,
+                value: 50,//需要注意这里的设置需要和对应的数据类型相匹配
+                dashStyle:'ShortDash'//定制警戒线样式,有虚线/实线...
+            }],
+            plotOptions:{
+                column:{
+                    pointPadding:0.2,
+                    borderWidth:0
+                }
+            },
+            series:[
+                {
+                    name:'总流量',
+                    type:'column',
+                    data:[243.9987, 438.6912, 180.5488, 291.2257, 177.1472, 213.0009, 225.5246, 257.4106, 294.4447, 286.8605, 257.5629, 243.9987, 438.6912, 180.5488, 291.2257, 177.1472, 213.0009, 225.5246, 257.4106, 294.4447, 286.8605, 257.5629, 438.6912, 438.6912]
+
+                },
+                {
+                    name:'Gb带宽利用率',
+                    yAxis:1,
+                    type:'line',
+                    data:[66.86, 42.71, 23.68, 15.94, 12.77, 12.03, 22.37, 35.55, 47.38, 56.57, 61.69, 61.90, 69.31, 60.38, 61.07, 56.76, 54.85, 54.23, 67.08, 66.50, 68.58, 70.06, 76.29, 80.04
+                    ]
+                }
+            ]
+        });
+
+        //初始化表格二数据
+        jQuery("#list2").jqGrid({
+            datatype:"local",
+            height:'auto',
+            shrinkToFit:false,
+            autowidth:true,
+            colNames:['BSC_IP', 'SGSN_IP', '上行流量', '下行流量', '总流量', 'IP链路流量占比'],
+            colModel:[
+                { name:'type', index:'type', width:100 },
+                { name:'flow', index:'flow', width:100 },
+                { name:'user', index:'user', width:80 },
+                { name:'rate', index:'rate', width:80 },
+                { name:'bus_rate', index:'bus_rate', width:80 },
+                { name:'suc_rate', index:'suc_rate', width:100 },
+            ]
+//        multiselect: false,
+//        sortname:'type',
+//        sortorder:'asc',
+//        viewrecords:true,
+//        rowNum:10,
+//        rowList:[10,20,30],
+//        pager:"#gridPager2"
+        });//.navGrid('#gridPager2',{edit:false,add:false,del:false})
+        var mydata2 = [
+            { type:"10.128.34.14", flow:"10.129.169.96", user:"9.5954", rate:"44.2633", bus_rate:"53.8587", suc_rate:"12.28%" },
+            { type:"10.128.34.9", flow:"10.129.169.96", user:"7.9493", rate:"41.816", bus_rate:"49.7653", suc_rate:"11.34%" },
+            { type:"10.128.34.4", flow:"10.129.169.96", user:"6.9149", rate:"3576.89", bus_rate:"42.6838", suc_rate:"9.73%" },
+            { type:"10.128.34.3", flow:"10.129.169.96", user:"7.0962", rate:"32.5871", bus_rate:"39.6833", suc_rate:"9.05%" },
+            { type:"10.128.34.2", flow:"10.129.169.96", user:"6.7705", rate:"31.19", bus_rate:"37.9605", suc_rate:"8.65%" },
+            { type:"10.128.34.6", flow:"10.129.169.96", user:"6.623", rate:"29.766", bus_rate:"36.389", suc_rate:"8.29%" },
+            { type:"10.128.34.5", flow:"10.129.169.96", user:"4.6", rate:"21.1029", bus_rate:"25.7029", suc_rate:"5.86%" },
+            { type:"10.128.34.7", flow:"10.129.169.96", user:"2.7313", rate:"13.6126", bus_rate:"16.3439", suc_rate:"3.73%" },
+            { type:"10.128.34.22", flow:"10.129.169.96", user:"2.4335", rate:"13.0142", bus_rate:"15.4477", suc_rate:"3.52%" },
+            { type:"10.128.34.18", flow:"10.129.169.96", user:"1.8601", rate:"11.6629", bus_rate:"13.523", suc_rate:"3.08%" },
+            { type:"10.128.34.10", flow:"10.129.169.96", user:"2.8109", rate:"9.5286", bus_rate:"12.3395", suc_rate:"2.81%" },
+            { type:"10.128.34.19", flow:"10.129.169.96", user:"2.1554", rate:"9.3012", bus_rate:"11.4566", suc_rate:"2.61%" },
+            { type:"10.128.34.17", flow:"10.129.169.96", user:"2.1433", rate:"8.9042", bus_rate:"11.0475", suc_rate:"2.52%" },
+            { type:"10.128.34.1", flow:"10.129.169.96", user:"1.7152", rate:"8.9439", bus_rate:"10.6591", suc_rate:"2.43%" },
+            { type:"10.128.34.15", flow:"10.129.169.96", user:"2.0819", rate:"8.3862", bus_rate:"10.4681", suc_rate:"2.39%" },
+            { type:"10.128.34.20", flow:"10.129.169.96", user:"1.8835", rate:"8.213", bus_rate:"10.0966", suc_rate:"2.30%" },
+            { type:"10.128.34.8", flow:"10.129.169.96", user:"1.7797", rate:"7.9032", bus_rate:"9.6829", suc_rate:"2.21%" },
+            { type:"10.128.34.11", flow:"10.129.169.96", user:"1.8501", rate:"7.1261", bus_rate:"8.9762", suc_rate:"2.05%" },
+            { type:"10.128.34.21", flow:"10.129.169.96", user:"1.348", rate:"5.5524", bus_rate:"6.9004", suc_rate:"1.57%" },
+            { type:"10.128.34.12", flow:"10.129.169.96", user:"1.0827", rate:"4.4634", bus_rate:"5.5461", suc_rate:"1.26%" },
+            { type:"10.128.34.13", flow:"10.129.169.96", user:"1.5979", rate:"3.7897", bus_rate:"5.3876", suc_rate:"1.23%" },
+            { type:"10.128.34.16", flow:"10.129.169.96", user:"0.7736", rate:"3.9991", bus_rate:"4.7727", suc_rate:"1.09%" }
+        ];
+        for (var i = 0; i <= mydata2.length; i++)
+            jQuery("#list2").addRowData(i + 1, mydata2[i]);
+
+        /*jqgrid自适应窗口宽度*/
+        $(function () {
+            $("#list2").setGridHeight(($(window).height() - 150) / 2);
+            $(window).resize(function () {
+                $("#list2").setGridWidth($(window).width() * 0.5);
+//            $("#gridPager2").setGridWidth($(window).width()*0.5);
+            });
+        });
+
+    })
+</script>
+

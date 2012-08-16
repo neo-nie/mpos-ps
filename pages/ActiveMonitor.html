@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>主动监控</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="apple-touch-icon" href="images/icon.png"/>
+<link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+<link rel="Stylesheet" href="../styles/Style.css"/>
+
+<!--弹出框样式脚本-->
+<link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet"/>
+<script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+<script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+
+<script>
+    function ShowDialog() {
+        art.dialog({
+            title:'新建查询',
+            lock:true,
+            content:"<div><iframe height='400' width='500' scrolling='no' frameborder='0' src='Dialog/NetworkFailAnalysisSetup.html'/></div>",
+            okValue:'确定',
+            ok:function () {
+            },
+            cancel:function () {
+            },
+            cancelValue:'取消',
+            padding:'5px'
+        });
+    }
+
+</script>
+
+<script type="text/javascript" src="../scripts/jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="../scripts/jquery/jquery-ui-1.8.21.custom.min.js"></script>
+
+<script src="../scripts/js/highcharts.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    $("#chart_01").height(($(window).height() - 70) / 2);
+    $("#chart_02").height(($(window).height() - 70) / 2);
+    $("#chart_03").height(($(window).height() - 70) / 2);
+    $("#chart_04").height(($(window).height() - 70) / 2);
+    var chart1;
+    var chart2;
+    var chart3;
+    var chart4;
+    chart1 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_01',
+            zoomType:'xy'
+        },
+        title:{
+            text:'Attach性能指标'
+        },
+        xAxis:{
+            categories:['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+            labels:{
+                rotation:-45,
+                align:'right',
+                style:{
+                    fontFamily:'黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                max:350000,
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                max:100,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:''
+                },
+                opposite:true
+            }
+        ],
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'Attach请求次数',
+                type:'column',
+                data:[183418, 122725, 92637, 74638, 62139, 39996, 95358, 172841, 214103, 244567, 267816, 282648, 300329, 267967, 264792, 261907, 275462, 315453, 333148, 309883, 308832, 320840, 237423, 165453]
+            },
+            {
+                name:'Attach成功率',
+                yAxis:1,
+                type:'line',
+                data:[99.94, 99.95, 99.98, 99.99, 99.96, 99.95, 99.93, 99.96, 99.93, 99.93, 99.91, 99.94, 99.90, 99.87, 99.90, 99.92, 99.94, 99.95, 99.95, 99.94, 99.92, 99.97, 99.94, 99.96]
+            }
+        ]
+
+    });
+    chart2 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_02',
+            zoomType:'xy'
+        },
+        title:{
+            text:'PDP激活性能'
+        },
+        xAxis:{
+            categories:['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+            labels:{
+                rotation:-45,
+                align:'right',
+                style:{
+                    fontFamily:'黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                max:7500000,
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                max:100,
+                labels:{
+                    formatter:function () {
+                        return this.value + '%';
+                    }
+                },
+                title:{
+                    text:''
+                },
+                opposite:true
+            }
+        ],
+        plotOptions:{
+            column:{
+                pointPadding:0.2,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'PDP激活请求次数',
+                type:'column',
+                data:[6607446, 2307653, 3692730, 1642254, 1180672, 2369654, 1022432, 4903089, 5217094, 5969064, 5281546, 6070029, 7236828, 5997467, 5466332, 5370842, 5600334, 5986834, 6495496, 6528332, 6751160, 7217657, 7160184, 6243030]
+            },
+            {
+                name:'PDP激活成功率',
+                yAxis:1,
+                type:'line',
+                data:[86.90, 87.01, 87.46, 85.63, 84.51, 89.12, 85.73, 90.06, 88.49, 87.54, 88.12, 87.63, 87.84, 87.72, 87.25, 86.26, 86.32, 86.93, 87.25, 86.59, 86.03, 85.67, 85.31, 85.43]
+            }
+        ]
+
+    })
+    // Create the chart
+    chart3 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_03',
+            zoomType:'xy',
+            type:'line'
+        },
+        title:{
+            text:'无线移动性能'
+        },
+        xAxis:{
+            categories:['18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+            labels:{
+                rotation:-45,
+                align:'right',
+                style:{
+                    fontFamily:'黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:{
+            min:0,
+            max:100,
+            labels:{
+                formatter:function () {
+                    return this.value + '%';
+                }
+            },
+            title:{
+                text:''
+            }
+        },
+        tooltip:{
+            formatter:function () {
+                return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '%'
+            }
+        },
+        plotOptions:{
+            column:{
+                stacking:'normal'
+            }
+        },
+        series:[
+            {
+                name:'FLUSH成功率',
+                data:[92.55, 93.39, 92.40, 90.65, 89.39, 88.86, 91.30, 93.14, 93.58, 93.44, 92.70, 91.06, 89.01, 90.48, 91.95, 92.60, 92.83, 91.62, 89.44, 88.60, 88.40, 86.39, 86.56, 89.20]
+            },
+            {
+                name:'RAU成功率',
+                data:[86.91, 88.38, 87.69, 85.90, 84.81, 85.26, 88.09, 90.21, 89.31, 88.96, 88.08, 87.58, 88.09, 87.68, 87.26, 87.20, 87.32, 87.44, 87.22, 86.36, 85.91, 85.49, 85.38, 85.39]
+
+            }
+        ]
+
+    });
+    chart4 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_04',
+            zoomType:'xy',
+            type:'line'
+        },
+        title:{
+            text:'无线网络质量'
+        },
+        xAxis:{
+            categories:['18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+            labels:{
+                rotation:-45,
+                align:'right',
+                style:{
+                    fontFamily:'黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:{
+            min:0,
+            max:0.7,
+            labels:{
+                formatter:function () {
+                    return this.value + '%';
+                }
+            },
+            title:{
+                text:''
+            }
+        },
+        tooltip:{
+            formatter:function () {
+                return '<b>' + this.x + '</b><br/>' +
+                        this.series.name + ': ' + this.y + '%'
+            }
+        },
+        plotOptions:{
+            column:{
+                stacking:'normal'
+            }
+        },
+        series:[
+            {
+                name:'Radio-Stauts 比例',
+                data:[0.01, 0.02, 0.02, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.03, 0.02, 0.01, 0.01, 0.02, 0.01, 0.02, 0.03, 0.02, 0.03, 0.02, 0.02]
+            },
+            {
+                name:'LLC-Stauts 比例',
+                data:[0.53, 0.53, 0.39, 0.32, 0.28, 0.26, 0.24, 0.27, 0.33, 0.32, 0.33, 0.36, 0.36, 0.43, 0.41, 0.39, 0.39, 0.40, 0.42, 0.49, 0.46, 0.49, 0.49, 0.65]
+            },
+            {
+                name:'Paging_NO_Rasp比例',
+                data:[0.18, 0.13, 0.08, 0.05, 0.06, 0.06, 0.12, 0.19, 0.16, 0.17, 0.17, 0.18, 0.21, 0.16, 0.16, 0.16, 0.17, 0.19, 0.19, 0.20, 0.18, 0.18, 0.20, 0.21]
+
+            }
+        ]
+
+    });
+});
+</script>
+<script src="../scripts/app.js"></script>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg"/><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">主动监控</a>
+    </span>
+    <!--<div id="navigation">-->
+        <!--<div class="navigationmain">-->
+            <!--<ul>-->
+                <!--<li class="current"><a href="javascript:"><span>主动监控</span></a></li>-->
+            <!--</ul>-->
+        <!--</div>-->
+    <!--</div>-->
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png"/>注销</a><a href="javascript:" onclick="ShowSetting();"><img
+                src="../images/setting.png"/>设置</a></span></div>
+    </div>
+</div>
+<div id="content">
+    <!--<div class="selectdiv">
+        <a href="javascript:" title="新建查询" class="linkbtn" onclick="ShowDialog();"><span>新建查询</span></a><span
+            style="margin: 5px;">当前查询：全网，总体性能，一小时粒度</span>
+    </div>-->
+    <div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="main_table">
+            <tr>
+                <td width="50%">
+                    <div class="chart_div" id="chart_01">
+                    </div>
+                </td>
+                <td width="50%">
+                    <div class="chart_div" id="chart_02">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td width="50%">
+                    <div class="chart_div" id="chart_03">
+                    </div>
+                </td>
+                <td width="50%">
+                    <div class="chart_div" id="chart_04">
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+    </div>
+</div>
+</body>
+</html>

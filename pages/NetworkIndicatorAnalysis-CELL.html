@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>网络指标分析</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <link rel="apple-touch-icon" href="images/icon.png"/>
+    <link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=7"/>
+    <link rel="Stylesheet" href="../styles/Style.css"/>
+    <!--jqgrid-->
+    <link rel="stylesheet" type="text/css" href="../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css"/>
+    <link rel="stylesheet" type="text/css" href="../scripts/jquery/jqgrid/js/src/css/ui.jqgrid.css"/>
+    <link rel="stylesheet" type="text/css" href="../scripts/jquery/jqgrid/js/src/css/jquery.searchFilter.css"/>
+    <script src="../scripts/jquery/jquery-1.7.2.js" type="text/javascript"></script>
+    <script src="../scripts/jquery/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+    <!--弹出窗引用-->
+    <link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet"/>
+    <script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+    <script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+    <script src="../scripts/app.js"></script>
+    <script src="../scripts/querydata.js"></script>
+    <script type="text/javascript">
+        function ShowDialog() {
+            art.dialog({
+                title:'新建查询',
+                content:"<div><iframe height='425' id='selectpage' width='500' scrolling='no' frameborder='0' src='Dialog/NetworkIndicatorAnalysisSelect.html'/></div>",
+                lock:true,
+                padding:'5px',
+                button: [
+                    {
+                        value: '保存模版',
+                        width:'75px',
+                        callback: function () {
+                        }
+                    },
+                    {
+                        value: '直接导出',
+                        callback: function () {
+                        }
+                    },
+                    {
+                        value: '查询',
+                        width:'75px',
+                        callback: function () {
+                        }
+                    },
+                    {
+                        value: '取消',
+                        width:'75px'
+                    }
+                ]
+
+            });
+        }
+    </script>
+
+    <!--弹性滚动条iscroll-->
+    <script type="text/javascript" src="../scripts/iscroll.js"></script>
+    <script type="text/javascript">
+
+//        var myScroll;
+//        function loaded() {
+//            myScroll = new iScroll('iscroll_div');
+//        }
+//
+//        document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+//        document.addEventListener('DOMContentLoaded', loaded, false);
+
+    </script>
+    <style>
+
+    </style>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg" /><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">网络指标分析</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png" />注销</a><a href="javascript:" onclick="ShowDialog();"><img src="../images/setting.png" />设置</a></span></div>
+    </div>
+</div>
+<div id="content">
+    <div class="selectdiv">
+        <a href="javascript:" class="linkbtn" onclick="ShowDialog();"><span>新建查询</span></a><span style="margin: 5px;">当前查询：全网，总体性能，一小时粒度，最近24小时</span>
+    </div>
+    <div>
+        <table id="list"></table>
+    </div>
+    <!--<div id="iscroll_div" style=" position:absolute; top:33px; bottom: 0; width: 100%;">-->
+        <!--<div id="gridPager"></div>-->
+    <!--</div>-->
+</div>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $('#list').jqGrid({
+            datatype:"local",
+            height:'auto',
+            shrinkToFit:false,
+            autowidth:true,
+            scrollrows:true,
+            colNames:['时间段', '网元', '附着请求总次数', '附着成功次数', '附着成功率', '附着平均响应时延(ms)', 'PDP激活请求总次数', 'PDP激活成功次数', 'PDP激活成功率', 'PDP激活平均响应时延(ms)'],
+            colModel:[
+                { name:'timeslot', index:'timeslot', width:150 },
+                { name:'ne', index:'ne', width:250 },
+                { name:'attreq_count', index:'attreq_count', width:100 },
+                { name:'attsuc_num', index:'attsuc_num', width:100 },
+                { name:'attsuc_rate', index:'attsuc_rate', width:100 },
+                { name:'attres_timedelay', index:'attres_timedelay', width:150 },
+                { name:'pdpactreq_count', index:'pdpactreq_count', width:120},
+                { name:'pdpactsuc_num', index:'pdpactsuc_num', width:120},
+                { name:'pdpactsuc_rate', index:'pdpactsuc_rate', width:120},
+                { name:'pdpact_timedelay', index:'pdpact_timedelay', width:180}
+            ],
+            gridComplete:function () {
+                var ids = $('#list').jqGrid('getDataIDs');
+                for (var i = 0; i < ids.length; i++) {
+                    var cl = ids[i];
+                    span_left = "<span style='float: left; line-height: 22px;'>";
+                    span_right = "</span>";
+                    ae = "<select class='dropselectbtn' onchange='window.location.href=this.options[selectedIndex].value'><option value='NetworkIndicatorAnalysis.html'>SGSN</option><option value='NetworkIndicatorAnalysis-BSC.html'>BSC</option><option value='NetworkIndicatorAnalysis-CELL.html' selected>CELL</option></select>";
+                    be = "<a href='javascript:' class='chart_btn' ><img src='../images/3d_bar_chart.png'></a>";
+                    se = "<a href='javascript:' class='chart_btn' ><img src='../images/Analysis.png'></a>";
+                    $('#list').jqGrid('setRowData', ids[i], {ne:span_left + mydata[i].ne + span_right + ae});
+                    $('#list').jqGrid('setRowData', ids[i], {attsuc_rate:span_left + mydata[i].attsuc_rate + span_right + be + se});
+                    $('#list').jqGrid('setRowData', ids[i], {pdpactsuc_rate:span_left + mydata[i].pdpactsuc_rate + span_right + be + se});
+                }
+            }
+        });//.navGrid('#gridPager',{edit:false,add:false,del:false})
+        var mydata = [
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"90307", attsuc_num:"566654", attsuc_rate:"82.56%", attres_timedelay:"223", pdpactreq_count:"112343", pdpactsuc_num:"434662", pdpactsuc_rate:"98.23%", pdpact_timedelay:"45" },
+            { timeslot:"2012/2/2  18:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"122342", attsuc_num:"54345", attsuc_rate:"83.00%", attres_timedelay:"311", pdpactreq_count:"351335", pdpactsuc_num:"321455", pdpactsuc_rate:"99.10%", pdpact_timedelay:"62" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"223451", attsuc_num:"246886", attsuc_rate:"90.55%", attres_timedelay:"343", pdpactreq_count:"345346", pdpactsuc_num:"278976", pdpactsuc_rate:"98.74%", pdpact_timedelay:"53" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"102322", attsuc_num:"787545", attsuc_rate:"89.71%", attres_timedelay:"567", pdpactreq_count:"632663", pdpactsuc_num:"444099", pdpactsuc_rate:"98.62%", pdpact_timedelay:"77" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"139983", attsuc_num:"666776", attsuc_rate:"90.16%", attres_timedelay:"764", pdpactreq_count:"456756", pdpactsuc_num:"334566", pdpactsuc_rate:"99.35%", pdpact_timedelay:"23" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"112342", attsuc_num:"789113", attsuc_rate:"91.01%", attres_timedelay:"245", pdpactreq_count:"345565", pdpactsuc_num:"233467", pdpactsuc_rate:"98.79%", pdpact_timedelay:"89" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"356675", attsuc_num:"3418172", attsuc_rate:"90.42%", attres_timedelay:"467", pdpactreq_count:"989785", pdpactsuc_num:"113456", pdpactsuc_rate:"98.64%", pdpact_timedelay:"64" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"232755", attsuc_num:"3019847", attsuc_rate:"91.36%", attres_timedelay:"554", pdpactreq_count:"345354", pdpactsuc_num:"552581", pdpactsuc_rate:"99.21%", pdpact_timedelay:"67" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"200985", attsuc_num:"9928776", attsuc_rate:"92.36%", attres_timedelay:"678", pdpactreq_count:"568214", pdpactsuc_num:"367835", pdpactsuc_rate:"99.56%", pdpact_timedelay:"44" },
+            { timeslot:"2012/2/2  17:00", ne:"SGSN204-FSM06B2-FSCELL1", attreq_count:"285665", attsuc_num:"1223455", attsuc_rate:"95.25%", attres_timedelay:"875", pdpactreq_count:"522676", pdpactsuc_num:"224558", pdpactsuc_rate:"98.36%", pdpact_timedelay:"31" }
+        ];
+        for (var i = 0; i <= mydata.length; i++)
+            jQuery("#list").addRowData(i + 1, mydata[i]);
+        /*jqgrid自适应窗口宽度*/
+        $(function () {
+            jQuery("#list").setGridHeight($(window).height() - 117);
+//            $(window).resize(function () {
+//                $("#list").setGridWidth($(window).width() * 1);
+//            });
+        });
+    });
+
+</script>

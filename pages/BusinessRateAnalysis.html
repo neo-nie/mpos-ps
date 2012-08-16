@@ -1,0 +1,382 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>业务速率分析</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+<link rel="apple-touch-icon" href="images/icon.png"/>
+<link rel="apple-touch-startup-image" href="images/startup-1024x748.png"/>
+<link rel="Stylesheet" href="../styles/Style.css"/>
+<link href="../styles/css/thickbox.css" rel="stylesheet" type="text/css">
+
+<!--弹出框样式脚本-->
+<link id="artDialog-skin" href="../styles/artDialog-skin/skins/default.css" rel="stylesheet"/>
+<script src="../scripts/jquery/artDialog/artDialog.min.js"></script>
+<script src="../scripts/jquery/artDialog/artDialog.plugins.min.js"></script>
+
+<script>
+    function ShowDialog() {
+        art.dialog({
+            title:'新建查询',
+            lock:true,
+            content:"<div><iframe height='400' width='500' scrolling='no' frameborder='0' src='Dialog/BusinessRateAnalysisSetup.html'/></div>",
+            okValue:'确定',
+            ok:function () {
+            },
+            cancel:function () {
+            },
+            cancelValue:'取消',
+            padding:'5px'
+        });
+    }
+    function ShowSetting() {
+        art.dialog({
+            title:'设置',
+            lock:true,
+            content:"<img src='../images/setup.jpg' width='740' height='362' />",
+            padding:'0'
+        });
+
+    }
+</script>
+
+<!--jqgrid-->
+<link rel="stylesheet" type="text/css" href="../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css"/>
+<link rel="stylesheet" type="text/css" href="../scripts/jquery/jqgrid/js/src/css/ui.jqgrid.css"/>
+<!--<link rel="stylesheet" type="text/css" media="screen" href="js/src/css/jquery.searchFilter.css" />-->
+<script src="../scripts/jquery/jquery-1.7.2.js" type="text/javascript"></script>
+<script src="../scripts/jquery/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+
+<!--tab页-->
+<!--<link type="text/css" href="../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css" rel="stylesheet" />-->
+<!--<script type="text/javascript" src="../scripts/jquery/jquery-1.7.2.min.js"></script>-->
+<script type="text/javascript" src="../scripts/jquery/jquery-ui-1.8.21.custom.min.js"></script>
+
+<script src="../scripts/js/highcharts.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+    <!--tab初始化-->
+    $('#tabs1').tabs();
+    $('#tabs2').tabs();
+    $('#tabs3').tabs();
+
+    $("#chart_01").height(($(window).height() - 100) / 2);
+    var chart1;
+    chart1 = new Highcharts.Chart({
+        chart:{
+            renderTo:'chart_01',
+            zoomType:'xy'
+        },
+        title:{
+            text:'SGSN204网页浏览业务指标趋势'
+        },
+        xAxis:{
+            categories:['0:00', '1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+            labels:{
+                rotation:-30,
+                align:'right',
+                style:{
+                    fontFamily:'黑体'           //Times New Roman
+                }
+            }
+        },
+        yAxis:[
+            { // Primary yAxis
+                labels:{
+                    formatter:function () {
+                        return this.value + 'MB';
+                    }
+                },
+                title:{
+                    text:''
+                }
+            },
+            { // Secondary yAxis
+                min:0,
+                max:120,
+                labels:{
+                    formatter:function () {
+                        return this.value + 'kbps';
+                    }
+                },
+                title:{
+                    text:''
+                },
+                opposite:true
+            }
+        ],
+        plotOptions:{
+            column:{
+                pointPadding:-0.1,
+                borderWidth:0
+            }
+        },
+        series:[
+            {
+                name:'SGSM204流量',
+                type:'column',
+                data:[5534.22, 8369.38, 419.47, 15016.31, 14651.73, 14931.69, 15211.31, 14714.37, 14453.1, 15485.05, 16802.81, 17305.5, 16465.73, 15461.74, 14461.74, 13368.18, 14953.1, 15985.05, 17302.81, 17805.5, 16965.73, 15961.74, 14961.74, 13868.18, ]
+            },
+            {
+                name:'全网平均速率',
+                yAxis:1,
+                type:'line',
+                data:[92, 69.27, 70.07, 71.07, 87.25, 71.46, 85.76, 85.56, 85.36, 79.73, 82.24, 81.89, 86.61, 80.95, 83.97, 74.9, 73.39, 73.47, 72.26, 71.49, 86.74, 87.88, 89.41, 90.7 ]
+            },
+            {
+                name:'SGSM204速率',
+                yAxis:1,
+                type:'line',
+                data:[107.54, 81.89, 82.24, 83.97, 98.05, 85.36, 96.61, 96.03, 95.5, 89.41, 92.46, 92.15, 92, 90.7, 93.04, 87.88, 87.25, 86.74, 85.76, 85.56, 96.77, 98.82, 100.69, 104.98 ]
+            }
+        ]
+
+    });
+    //jqgrid数据初始化
+    jQuery("#list2").jqGrid({
+        datatype:"local",
+        height:'auto',
+        shrinkToFit:false,
+        autowidth:true,
+        scrollrows:true,
+        colNames:['SGSN', '流量(MB)', '速率(kbps)','LIC丢帧率', 'Radio-Status次数', 'Gb带宽利用率'],<!-- 'TCP丢包重传率(核心网)', 'TCP丢包重传率(无线网)',-->
+        colModel:[
+            { name:'type', index:'type', width:80 },
+            { name:'flow', index:'flow', width:60 },
+            { name:'rate', index:'rate', width:70 },
+//            { name:'clost_rate', index:'clost_rate', width:190 },
+//            { name:'wlost_rate', index:'wlost_rate', width:190 },
+            { name:'lic_rate', index:'lic_rate', width:70 },
+            { name:'rs_num', index:'rs_num', width:100 },
+            { name:'gb_rate', index:'gb_rate', width:100}
+        ]
+    });
+    var mydata2 = [
+        { type:"SGSM204", flow:"422.238", rate:"10.5", clost_rate:"12.00%", wlost_rate:"12.00%", lic_rate:"12.00%", rs_num:"56731", gb_rate:"12.00%" },
+        { type:"SGSM206", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" }
+    ];
+    for (var i = 0; i <= mydata2.length; i++)
+        jQuery("#list2").addRowData(i + 1, mydata2[i]);
+    $(function () {
+        $("#list2").setGridHeight(($(window).height() - 150) / 2 - 32);
+    });
+    //jqgrid list3数据初始化
+    jQuery("#list3").jqGrid({
+        datatype:"local",
+        height:'auto',
+        shrinkToFit:false,
+        autowidth:true,
+//        scrollrows:true,
+        colNames:['BSC分布', '流量(MB)', '速率(kbps)',  'LIC丢帧率', 'Radio-Status次数', 'Gb带宽利用率'],<!-- 'TCP丢包重传率(核心网)', 'TCP丢包重传率(无线网)',-->
+        colModel:[
+            { name:'type', index:'type', width:80 },
+            { name:'flow', index:'flow', width:80 },
+            { name:'rate', index:'rate', width:80 },
+//            { name:'clost_rate', index:'clost_rate', width:190 },
+//            { name:'wlost_rate', index:'wlost_rate', width:190 },
+            { name:'lic_rate', index:'lic_rate', width:60 },
+            { name:'rs_num', index:'rs_num', width:100 },
+            { name:'gb_rate', index:'gb_rate', width:100}
+        ]
+    });
+    var mydata3 = [
+        { type:"FSBSC1", flow:"422.238", rate:"10.5", clost_rate:"12.00%", wlost_rate:"12.00%", lic_rate:"12.00%", rs_num:"56731", gb_rate:"12.00%" },
+        { type:"FSBSC2", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC3", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC4", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC5", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC6", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC7", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC8", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC9", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC10", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+        { type:"FSBSC11", flow:"281.492", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"11.00%", rs_num:"36756", gb_rate:"11.00%" },
+
+    ];
+    for (var i = 0; i <= mydata3.length; i++)
+        jQuery("#list3").addRowData(i + 1, mydata3[i]);
+    $(function () {
+        $("#list3").setGridHeight(($(window).height() - 150) / 2 - 32);
+    });
+    //jqgrid list4数据初始化
+    jQuery("#list4").jqGrid({
+        datatype:"local",
+        height:'auto',
+        shrinkToFit:false,
+        autowidth:true,
+        scrollrows:true,
+        colNames:['CELL分布', '流量(MB)', '速率(kbps)', 'LIC丢帧率', 'Radio-Status次数', '小区频繁重选次数'],<!-- 'TCP丢包重传率(核心网)', 'TCP丢包重传率(无线网)',-->
+        colModel:[
+            { name:'type', index:'type', width:80 },
+            { name:'flow', index:'flow', width:60 },
+            { name:'rate', index:'rate', width:70 },
+//            { name:'clost_rate', index:'clost_rate', width:190 },
+//            { name:'wlost_rate', index:'wlost_rate', width:190 },
+            { name:'lic_rate', index:'lic_rate', width:60 },
+            { name:'rs_num', index:'rs_num', width:150 },
+            { name:'re_rate', index:'re_rate', width:150}
+        ]
+    });
+    var mydata4 = [
+        { type:"FSCELL1", flow:"3.73", rate:"10.5", clost_rate:"12.00%", wlost_rate:"12.00%", lic_rate:"5.00%", rs_num:"731", re_rate:"34" },
+        { type:"FSCELL2", flow:"3.67", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%", lic_rate:"3.21%", rs_num:"756", re_rate:"78" },
+        { type:"FSCELL3", flow:"3.67", rate:"12.3", clost_rate:"9.60%", wlost_rate:"9.60%", lic_rate:"5.00%", rs_num:"731", re_rate:"34" },
+        { type:"FSCELL4", flow:"3.65", rate:"13.4", clost_rate:"7.80%", wlost_rate:"7.80%", lic_rate:"3.12%", rs_num:"756", re_rate:"78" },
+        { type:"FSCELL5", flow:"3.9", rate:"9.8", clost_rate:"6.45%", wlost_rate:"6.45%", lic_rate:"5.00%", rs_num:"731", re_rate:"34" },
+        { type:"FSCELL6", flow:"3.6", rate:"8.3", clost_rate:"5.88%", wlost_rate:"5.88%", lic_rate:"3.12%", rs_num:"756", re_rate:"78" },
+        { type:"FSCELL7", flow:"3.59", rate:"7.8", clost_rate:"5.46%", wlost_rate:"5.46%", lic_rate:"5.00%", rs_num:"731", re_rate:"34"  },
+        { type:"FSCELL8", flow:"3.59", rate:"11.2", clost_rate:"5.05%", wlost_rate:"5.05%", lic_rate:"3.12%", rs_num:"756", re_rate:"78" },
+        { type:"FSCELL9", flow:"3.58", rate:"115.4", clost_rate:"5.00%", wlost_rate:"5.00%", lic_rate:"5.00%", rs_num:"731", re_rate:"34" },
+        { type:"FFSCELL10", flow:"3.57", rate:"7.3", clost_rate:"4.98%", wlost_rate:"4.98%", lic_rate:"3.12%", rs_num:"756", re_rate:"78" },
+        { type:"FFSCELL11", flow:"3.57", rate:"7.3", clost_rate:"4.98%", wlost_rate:"4.98%", lic_rate:"3.12%", rs_num:"756", re_rate:"78" }
+    ];
+    for (var i = 0; i <= mydata4.length; i++)
+        jQuery("#list4").addRowData(i + 1, mydata4[i]);
+    $(function () {
+        $("#list4").setGridHeight(($(window).height() - 150) / 2 - 32);
+    });
+
+    //jqgrid list5数据初始化
+    jQuery("#list5").jqGrid({
+        datatype:"local",
+        height:'auto',
+        shrinkToFit:false,
+        autowidth:true,
+        scrollrows:true,
+        colNames:['SP', '流量(MB)', '请求次数', '速率(kbps)', 'TCP丢包重传率(核心网)', 'TCP丢包重传率(无线网)'],
+        colModel:[
+            { name:'type', index:'type', width:80 },
+            { name:'flow', index:'flow', width:80 },
+            { name:'re_num', index:'re_num', width:80 },
+            { name:'rate', index:'rate', width:80 },
+            { name:'clost_rate', index:'clost_rate', width:190 },
+            { name:'wlost_rate', index:'wlost_rate', width:190 }
+        ]
+    });
+    var mydata5 = [
+        { type:"腾讯网", flow:"143.34", re_num:"16017", rate:"10.5", clost_rate:"12.00%", wlost_rate:"12.00%" },
+        { type:"移动梦网", flow:"99.59", re_num:"11438", rate:"11.2", clost_rate:"11.00%", wlost_rate:"11.00%"},
+        { type:"新浪网", flow:"68.81", re_num:"7296", rate:"12.3", clost_rate:"9.60%", wlost_rate:"9.60%" },
+        { type:"3G门户", flow:"60.54", re_num:"7296", rate:"13.4", clost_rate:"7.8%", wlost_rate:"7.8%" },
+        { type:"乐讯网", flow:"60.47", re_num:"3942", rate:"9.8", clost_rate:"6.45%", wlost_rate:"6.45%" },
+        { type:"UC门户", flow:"58.34", re_num:"6863", rate:"8.3", clost_rate:"5.88%", wlost_rate:"5.88%" },
+        { type:"凤凰网", flow:"57.75", re_num:"10395", rate:"7.8", clost_rate:"5.46%", wlost_rate:"5.46%" },
+        { type:"网易", flow:"5711.", re_num:"7155", rate:"11.2", clost_rate:"5.05%", wlost_rate:"5.05%" },
+        { type:"空中网", flow:"53.85", re_num:"16069", rate:"15.4", clost_rate:"5.00%", wlost_rate:"5.00%" },
+        { type:"百度", flow:"43.93", re_num:"26049", rate:"7.3", clost_rate:"4.98%", wlost_rate:"4.98%"}
+    ];
+    for (var i = 0; i <= mydata5.length; i++)
+        jQuery("#list5").addRowData(i + 1, mydata5[i]);
+    $(function () {
+        $("#list5").setGridHeight(($(window).height() - 150) / 2 - 32);
+    });
+    //jqgrid list6数据初始化
+    jQuery("#list6").jqGrid({
+        datatype:"local",
+        height:'auto',
+        shrinkToFit:false,
+        autowidth:true,
+        scrollrows:true,
+        colNames:['业务类型', '流量(MB)', '速率(kbps)', 'TCP丢包重传率(核心网)', 'TCP丢包重传率(无线网)'],
+        colModel:[
+            { name:'type', index:'type', width:80 },
+            { name:'flow', index:'flow', width:80 },
+            { name:'rate', index:'rate', width:80 },
+            { name:'clost_rate', index:'clost_rate', width:190 },
+            { name:'wlost_rate', index:'wlost_rate', width:190 }
+        ]
+    });
+    var mydata6 = [
+        { type:"网页业务", flow:"703.73", rate:"10.72", clost_rate:"12%", wlost_rate:"12%" },
+        { type:"微博业务", flow:"143.34", rate:"10.5", clost_rate:"12%", wlost_rate:"12%" },
+        { type:"彩信MO", flow:"99.59", rate:"11.2", clost_rate:"11%", wlost_rate:"11%" },
+        { type:"彩信MT", flow:"68.81", rate:"12.3", clost_rate:"9.6%", wlost_rate:"9.6%" },
+        { type:"WAP下载", flow:"60.54", rate:"13.4", clost_rate:"7.8%", wlost_rate:"7.8%" },
+
+    ];
+    for (var i = 0; i <= mydata6.length; i++)
+        jQuery("#list6").addRowData(i + 1, mydata6[i]);
+    $(function () {
+        $("#list6").setGridHeight(($(window).height() - 150) / 2 - 32);
+    });
+
+});
+
+</script>
+<script src="../scripts/app.js"></script>
+</head>
+<body>
+<div id="header">
+    <a href="../index.html" class="logo_btn">
+        <img src="../images/logo_img.jpg"/><span>数据业务生态系统</span></a>
+    <span class="back_help">
+        <a href="../index.html">导航页</a><span>&nbsp;>&nbsp;</span><a href="javascript:">业务速率分析</a>
+    </span>
+    <div id="userinfo">
+        <div>
+            <span class="username">Admin</span>,欢迎登录系统！<span class="control"><a href="../login.html"><img
+                src="../images/exit.png"/>注销</a><a href="javascript:" onclick="ShowSetting();"><img
+                src="../images/setting.png"/>设置</a></span></div>
+    </div>
+</div>
+<div id="content">
+    <div class="selectdiv">
+        <a href="javascript:" title="新建查询" class="linkbtn" onClick="ShowDialog();"><span>新建查询</span></a><span
+            style="margin: 5px;">当前查询：全网，总体性能，一小时粒度</span>
+    </div>
+    <div>
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" class="main_table">
+            <tr>
+                <td width="50%">
+                    <div class="chart_div" id="chart_01">
+                    </div>
+                </td>
+                <td width="50%">
+                    <div id="tabs3">
+                        <ul>
+                            <li><a href="#tabs3-1">业务速率分析</a></li>
+                        </ul>
+                        <div id="tabs3-1">
+                            <table id="list6"></table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <div id="tabs1">
+                        <ul>
+                            <li><a href="#tabs1-1">SP</a></li>
+                        </ul>
+                        <div id="tabs1-1">
+                            <table id="list5"></table>
+                        </div>
+                    </div>
+
+                </td>
+                <td valign="top">
+                    <div id="tabs2">
+                        <ul>
+                            <li><a href="#tabs2-1">SGSN</a></li>
+                            <li><a href="#tabs2-2">BSC</a></li>
+                            <li><a href="#tabs2-3">CELL</a></li>
+                        </ul>
+                        <div id="tabs2-1">
+                            <table id="list2"></table>
+                        </div>
+                        <div id="tabs2-2">
+                            <table id="list3"></table>
+                        </div>
+                        <div id="tabs2-3">
+                            <table id="list4"></table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</body>
+</html>

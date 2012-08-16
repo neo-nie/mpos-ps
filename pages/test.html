@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>警告分析</title>
+<!--手风琴-->
+    <script type="text/javascript" language="javascript" src="../scripts/jquery/jquery-1.7.2.js"></script>
+    <script type="text/javascript" language="javascript" src="../scripts/jquery/jquery-ui-1.8.21.custom.min.js"></script>
+    <!--<link rel="stylesheet" href="../styles/css/ui-lightness/jquery-ui-1.8.21.custom.css"/>-->
+
+    <!--jqgrid-->
+    <link rel="stylesheet" type="text/css" media="screen" href="../styles/css/ui-lightness/jquery-ui-1.7.2.custom.css"/>
+    <link rel="stylesheet" type="text/css" media="screen" href="../scripts/jquery/jqgrid/js/src/css/ui.jqgrid.css"/>
+    <!--<script src="../scripts/jquery/jquery-1.7.2.js" type="text/javascript"></script>-->
+    <script src="../scripts/jquery/jqgrid/js/jquery.jqGrid.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript" language="javascript">
+        $(function(){
+            $("#accordion").accordion(
+                    {
+                        fillSpace:true,
+                        header: "h3"
+                    }
+            );
+        })
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#list1').jqGrid({
+                datatype:"local",
+                height:'550',
+
+                shrinkToFit:true,
+                autowidth:true,
+                scrollrows:true,
+                colNames:['流水号', '告警标识', '网元名称', '网元类型', '告警级别', '规则名称', '告警触发时间','时间粒度','频次','操作'],
+                colModel:[
+                    { name:'timeslot', index:'timeslot', width:60 },
+                    { name:'ne', index:'ne', width:182 },
+                    { name:'attreq_count', index:'attreq_count', width:182 },
+                    { name:'attsuc_num', index:'attsuc_num', width:60 },
+                    { name:'attsuc_rate', index:'attsuc_rate', width:182 },
+                    { name:'attres_timedelay', index:'attres_timedelay', width:182 },
+                    { name:'pdpactreq_count', index:'pdpactreq_count', width:182},
+                    { name:'pdpa', index:'pdpa', width:182},
+                    { name:'count', index:'count', width:182},
+                    { name:'pdpactreq', index:'pdpactreq', width:182}
+
+                ]
+
+            });//.navGrid('#gridPager',{edit:false,add:false,del:false})
+            var mydata1 = [
+                { timeslot:"16", ne:"FSSGSN204", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"PDP激活成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟", pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"17", ne:"FSSGSN206", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"PDP激活成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"18", ne:"FSSGSN204", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"Attach成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"19", ne:"FSSGSN206", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"Attach成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"20", ne:"FSM06B1", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"21", ne:"FSM12B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"22", ne:"FSM14B8", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"23", ne:"FSM17B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"24", ne:"FSCELL1", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"25", ne:"FSCELL2", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"26", ne:"FSCELL3", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"27", ne:"FSCELL4", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"28", ne:"FSM06B1", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"29", ne:"FSM12B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'},
+                { timeslot:"30", ne:"FSM14B8", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟",pdpa:'1',count:'2',pdpactreq:'3'}
+            ];
+            for (var i = 0; i <= mydata1.length; i++)
+                jQuery("#list1").addRowData(i + 1, mydata1[i]);
+        });
+
+
+
+        $(document).ready(function () {
+            $('#list2').jqGrid({
+                datatype:"local",
+                height:'540',
+
+                shrinkToFit:true,
+                autowidth:true,
+                scrollrows:true,
+                colNames:['序号', '告警对象', '设备', '告警级别', '告警名称', '告警触发时间', '告警统计周期'],
+                colModel:[
+                    { name:'timeslot', index:'timeslot', width:60 },
+                    { name:'ne', index:'ne', width:182 },
+                    { name:'attreq_count', index:'attreq_count', width:182 },
+                    { name:'attsuc_num', index:'attsuc_num', width:60 },
+                    { name:'attsuc_rate', index:'attsuc_rate', width:182 },
+                    { name:'attres_timedelay', index:'attres_timedelay', width:182 },
+                    { name:'pdpactreq_count', index:'pdpactreq_count', width:182}
+
+                ]
+
+            });//.navGrid('#gridPager',{edit:false,add:false,del:false})
+            var mydata1 = [
+                { timeslot:"1", ne:"FSSGSN204", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"PDP激活成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"2", ne:"FSSGSN206", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"PDP激活成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"3", ne:"FSSGSN204", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"Attach成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"4", ne:"FSSGSN206", attreq_count:"SGSN", attsuc_num:"1", attsuc_rate:"Attach成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"5", ne:"FSM06B1", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"6", ne:"FSM12B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"7", ne:"FSM14B8", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"8", ne:"FSM17B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"9", ne:"FSCELL1", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"10", ne:"FSCELL2", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"11", ne:"FSCELL3", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"12", ne:"FSCELL4", attreq_count:"CELL", attsuc_num:"3", attsuc_rate:"LLC-Discard>10%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"13", ne:"FSM06B1", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"14", ne:"FSM12B2", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"},
+                { timeslot:"15", ne:"FSM14B8", attreq_count:"BSC", attsuc_num:"2", attsuc_rate:"RAU成功率<90%", attres_timedelay:"2012/3/28 14:41:28", pdpactreq_count:"15分钟"}
+            ];
+            for (var i = 0; i <= mydata1.length; i++)
+                jQuery("#list2").addRowData(i + 1, mydata1[i]);
+        });
+
+
+
+
+
+    </script>
+    <style>
+        html,body{ height: 100%; padding: 0px; margin: 0px}
+    </style>
+</head>
+<body>
+<div id="accordion">
+    <div>
+        <h3><a href="#">活动告警</a></h3>
+        <div><table id="list1"></table></div>
+    </div>
+    <div>
+        <h3><a href="#">已清除告警</a></h3>
+        <div><table id="list2"></table></div>
+    </div>
+
+</body>
+</html> 
